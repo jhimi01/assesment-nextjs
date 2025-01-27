@@ -1,3 +1,4 @@
+'use client'
 import axios from "axios";
 import { Loader } from "lucide-react";
 import { useState } from "react";

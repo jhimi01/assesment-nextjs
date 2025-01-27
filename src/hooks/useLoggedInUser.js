@@ -8,8 +8,8 @@ export default function useLoggedInUser() {
   const [loading, setLoading] = useState(true); // loading state
   const [error, setError] = useState(null); // error handling
   const [refetch, setRefetch] = useState(false); // refetch state
-  const { getCookie } = useCookie({ key: "Token", days: 7 });
-  const token = getCookie()
+  const { getCookie } = useCookie({ key: 'Token', days: 7 });
+  const token = getCookie();
   
 
   useEffect(() => {

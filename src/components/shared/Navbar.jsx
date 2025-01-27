@@ -54,7 +54,7 @@ const Navbar = () => {
         <div className="md:flex justify-between items-center ">
           {/* logo */}
           <div className="text-2xl font-bold">
-            <Link href="/">
+            <Link  href="/">
               <h1>logoooo</h1>
             </Link>
           </div>
@@ -62,23 +62,23 @@ const Navbar = () => {
           <div className="flex items-center text-xl">
             <ul className="flex items-center gap-14">
               <li>
-                <Link href="/">Explore</Link>
+                <Link  href="/">Explore</Link>
               </li>
               <li>
-                <Link href="/">Book</Link>
+                <Link  href="/">Book</Link>
               </li>
               <li>
-                <Link href="/">Experience</Link>
+                <Link  href="/">Experience</Link>
               </li>
               <li>
-                <Link href="/">Privilege Club</Link>
+                <Link  href="/">Privilege Club</Link>
               </li>
             </ul>
           </div>
           {/* extra service */}
           <div className="flex items-center gap-10 text-xl">
             <div className="flex items-center gap-5">
-              <Link href="/">Help</Link>
+              <Link  href="/">Help</Link>
               <Search />
             </div>
             {/* login/server */}
@@ -88,7 +88,7 @@ const Navbar = () => {
             user.loggedInUser.token &&
             user.loggedInUser.token === token ? (
               <div className="flex gap-5 items-center">
-                <Link href="/profile">
+                <Link  href="/profile">
                   <img
                     className="w-12 h-12 rounded-full border-4 border-white"
                     src={
@@ -114,9 +114,9 @@ const Navbar = () => {
               <div className="flex gap-2 items-center">
                 <CircleUserRound />
                 <div className="flex gap-2">
-                  <Link href="/login">Log in</Link>
+                  <Link  href="/login">Log in</Link>
                   <span>|</span>
-                  <Link href="/signup">Sign up</Link>
+                  <Link  href="/signup">Sign up</Link>
                 </div>
               </div>
             )}
