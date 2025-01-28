@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
@@ -36,14 +36,11 @@ const Login = () => {
     setShowOTP(false);
     setEmail(data.email);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        {
-          email: data.email,
-          password: data.password,
-          recaptchaToken,
-        }
-      );
+      const response = await axios.post("/api/login", {
+        email: data.email,
+        password: data.password,
+        recaptchaToken,
+      });
 
       if (response.status === 200) {
         setLoading(false);
@@ -79,20 +76,17 @@ const Login = () => {
 
   const handleVerifyOTP = async (otp) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp-login",
-        {
-          email: email,
-          otp,
-        }
-      );
+      const response = await axios.post("/api/verify-otp-login", {
+        email: email,
+        otp,
+      });
 
       console.log(response);
 
       if (response.status === 200) {
         const { token, userData } = response.data;
         console.log("this is userdata", userData);
-        if (!token || token ===null || token === undefined) {
+        if (!token || token === null || token === undefined) {
           return;
         }
         setCookie(token);
@@ -183,7 +177,13 @@ const Login = () => {
                 sitekey="6LchN7gqAAAAAN1x37YAX0nhMkvuta3w_0ZiRElH"
                 onChange={onChange}
               />
-              <Link href="/send-email"><div><h4 className="text-xl underline text-primary cursor-pointer">Forget Password</h4></div></Link>
+              <Link href="/send-email">
+                <div>
+                  <h4 className="text-xl underline text-primary cursor-pointer">
+                    Forget Password
+                  </h4>
+                </div>
+              </Link>
               <button
                 disabled={loading}
                 type="submit"

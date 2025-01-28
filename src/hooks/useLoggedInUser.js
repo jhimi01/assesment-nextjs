@@ -4,23 +4,23 @@ import axios from 'axios';
 import { useCookie } from './useCookie';
 
 export default function useLoggedInUser() {
-  const [user, setUser] = useState(null); // user data
-  const [loading, setLoading] = useState(true); // loading state
-  const [error, setError] = useState(null); // error handling
-  const [refetch, setRefetch] = useState(false); // refetch state
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [refetch, setRefetch] = useState(false);
   const { getCookie } = useCookie({ key: 'Token', days: 7 });
   const token = getCookie();
   
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setLoading(true); // start loading
-      setError(null); // clear previous errors
+      setLoading(true);
+      setError(null);
 
       try {
         if (!token) throw new Error('No token found');
 
-        const response = await axios.get('http://localhost:5000/api/auth/loggedin-user', {
+        const response = await axios.get('/api/login', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,10 +35,10 @@ export default function useLoggedInUser() {
     };
 
     if (refetch || user === null) {
-      fetchUserData(); // fetch data when refetch is true or when user is not loaded yet
+      fetchUserData();
       setRefetch(false); // reset refetch state
     }
-  }, [refetch, token, user]); // dependencies
+  }, [refetch, token, user]);
 
-  return { user, loading, error, refetch: () => setRefetch(true) }; // return the hook data
+  return { user, loading, error, refetch: () => setRefetch(true) };
 }

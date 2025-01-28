@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { Edit } from "lucide-react";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
@@ -6,7 +6,7 @@ import EditProfileModal from "../../components/EditProfileModal";
 import { format } from "date-fns";
 import ImageUpload from "../../components/ImageUpload";
 
-const ProfilePage = () => {
+const Profile = () => {
   const { user, loading, error, refetch } = useLoggedInUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -82,10 +82,12 @@ const ProfilePage = () => {
                   <tr className="border-t">
                     <td className="p-2 font-semibold">Date of Birth:</td>
                     <td className="p-2">
-                      {format(
-                        new Date(user.userData?.dateOfBirth),
-                        "MMMM dd, yyyy"
-                      )}{" "}
+                      {user.userData?.dateOfBirth
+                        ? format(
+                            new Date(user.userData.dateOfBirth),
+                            "dd/MM/yyyy"
+                          )
+                        : "Date of birth not provided"}
                     </td>
                   </tr>
                   <tr className="border-t">
@@ -99,10 +101,12 @@ const ProfilePage = () => {
                   <tr className="border-t">
                     <td className="p-2 font-semibold">Created Account:</td>
                     <td className="p-2">
-                      {format(
-                        new Date(user.userData?.createdAt),
-                        "MMMM dd, yyyy"
-                      )}
+                      {user.userData?.createdAt
+                        ? format(
+                            new Date(user.userData?.createdAt),
+                            "dd/MM/yyyy"
+                          )
+                        : "Date of birth not provided"}
                     </td>
                   </tr>
                   <tr className="border-t">
@@ -145,4 +149,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;

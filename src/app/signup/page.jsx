@@ -46,7 +46,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "/api/signup",
         newUser
       );
       console.log("this is a response data", response.data);
@@ -93,7 +93,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp",
+        "/api/verify-otp",
         { email, otp }
       );
       console.log("otttttttttp", response);
