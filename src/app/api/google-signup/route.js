@@ -39,3 +39,41 @@ export async function POST(req) {
     );
   }
 }
+
+// export async function POST(req) {
+//   try {
+//     const body = await req.json();
+//     const { email, firstName, img, isVerified } = body;
+
+//     let user = await prisma.user.upsert({
+//       where: { email },
+//       update: { firstName, img, isVerified }, // Update user profile
+//       create: { email, firstName, img, isVerified }, // Create new user if not exists
+//     });
+
+//     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
+//       expiresIn: "7d",
+//     });
+
+//     await prisma.loggedInUser.upsert({
+//       where: { userId: user.id },
+//       update: { verifiedOtp: true, token },
+//       create: { userId: user.id, verifiedOtp: true, token },
+//     });
+
+//     return new Response(
+//       JSON.stringify({
+//         message: "User verified successfully",
+//         userData: { ...user },
+//         token,
+//       }),
+//       { status: 200 }
+//     );
+//   } catch (err) {
+//     console.log("Error occurred while creating/updating user:", err);
+//     return new Response(
+//       JSON.stringify({ message: "Error occurred while logging in with Google" }),
+//       { status: 500 }
+//     );
+//   }
+// }

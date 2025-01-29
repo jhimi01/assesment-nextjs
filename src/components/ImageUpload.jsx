@@ -1,5 +1,4 @@
 import axios from "axios";
-import PropTypes from "prop-types";
 import { Edit, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useCookie } from "../hooks/useCookie";
@@ -38,7 +37,7 @@ const ImageUpload = ({ onChange }) => {
 
       // Send the URL to the backend to update the user profile
       await axios.patch(
-        "http://localhost:5000/api/auth/edit-image",
+        "/api/image-update",
         { img: uploadedImageUrl },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -76,11 +75,6 @@ const ImageUpload = ({ onChange }) => {
       </label>
     </div>
   );
-};
-
-// Add prop-types validation
-ImageUpload.propTypes = {
-  onChange: PropTypes.func.isRequired,
 };
 
 export default ImageUpload;

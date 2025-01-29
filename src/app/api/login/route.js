@@ -10,14 +10,27 @@ const prisma = new PrismaClient();
 
 // Utility function to validate token
 const validateToken = (req) => {
-  const authHeader = req.headers.get("Authorization");
-  if (!authHeader) throw new Error("Authorization header missing");
-  const token = authHeader.split(" ")[1];
-  if (!token) throw new Error("Invalid token");
-  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (!decoded.userId) throw new Error("Invalid token payload");
-  return decoded.userId;
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) throw new Error("Authorization header missing");
+    
+    const token = authHeader.split(" ")[1];
+    console.log("authHeaderrrrrrr", token)
+    if (!token) throw new Error("Invalid token format");
+
+    if (!process.env.JWT_SECRET_KEY) {
+      throw new Error("JWT secret key is missing");
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (!decoded?.userId) throw new Error("Invalid token payload");
+
+    return decoded?.userId;
+  } catch (error) {
+    throw new Error(`Token validation failed: ${error.message}`);
+  }
 };
+
 
 // Utility function to handle responses
 const createResponse = (data, status = 200) =>
@@ -31,6 +44,15 @@ const handleError = (error, customMessage = "An error occurred") => {
     { status: 500 }
   );
 };
+// Utility function for error handling
+// const handleError = (error, customMessage = "An error occurred") => {
+//   console.error(customMessage, error instanceof Error ? error : new Error(error));
+//   return NextResponse.json(
+//     { error: error.message || customMessage },
+//     { status: 500 }
+//   );
+// };
+
 
 // Login
 export async function POST(req) {
@@ -104,13 +126,38 @@ export async function GET(req) {
 
 // Update loggedInUser data
 export async function PATCH(req) {
+  // console.log("reeeeeeeq",req)
   try {
     const userId = validateToken(req);
     const body = await req.json();
 
+    const {
+      firstName,
+      lastName,
+      email,
+      mobileNumber,
+      dateOfBirth,
+      gender,
+      nid,
+      country,
+      title,
+      address,
+    } = body;
+
     const updateUserData = await prisma.user.update({
       where: { id: userId },
-      data: body, // Updates all properties dynamically
+      data: {
+        firstName,
+        lastName,
+        email,
+        mobileNumber,
+        dateOfBirth,
+        gender,
+        nid,
+        country,
+        title,
+        address,
+      }, // Updates all properties dynamically
     });
 
     return createResponse({

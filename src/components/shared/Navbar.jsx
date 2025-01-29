@@ -9,6 +9,8 @@ import { useCookie } from "@/hooks/useCookie";
 const Navbar = () => {
   const { user } = useLoggedInUser();
   const pathname = usePathname();
+
+  console.log("userrrrrrrr",user)
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
 

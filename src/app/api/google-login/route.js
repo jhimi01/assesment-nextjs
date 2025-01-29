@@ -49,7 +49,8 @@ export async function POST(req) {
   } catch (err) {
     console.log("Error ocured while creating user:", err);
     return new Response(
-      JSON.stringify({ message: "Error ocured while login with google" })
+      JSON.stringify({ message: "Error ocured while login with google" }),
+      { status: 500 }
     );
   }
 }

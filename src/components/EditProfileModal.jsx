@@ -35,14 +35,18 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/login`, {
+      const response = await fetch('/api/login', {
         method: "PATCH",
         headers: {
-          // "Content-Type": "application/json",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Add the token here
         },
         body: JSON.stringify(formData),
       });
+       // ✅ Check if response body exists before parsing JSON
+   
+
+
       if (response.ok) {
         toast.success("updated", {
           position: "top-right",
@@ -56,7 +60,8 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           transition: Bounce,
         });
       }
-      const result = await response.json();
+      // const result = await response.json();
+      const result = response.headers.get("content-length") === "0" ? {} : await response.json();
       if (!response.ok) {
         throw new Error(result.message || "Something went wrong");
       }
