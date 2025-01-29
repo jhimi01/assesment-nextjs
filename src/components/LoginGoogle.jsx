@@ -1,45 +1,44 @@
-'use client'
+"use client";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-// import { useNavigate } from "react-router";
-import { useCookie } from "../hooks/useCookie";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useCookie } from "@/hooks/useCookie";
+import useLoggedInUser from "@/hooks/useLoggedInUser";
 
 const LoginGoogle = () => {
   const router = useRouter();
-  const { setCookie } = useCookie({ key: "Token", days: 7 });
+  const { refetch } = useLoggedInUser();
+  const { setCookie, getCookie } = useCookie({ key: "Token", days: 7 });
+  const token = getCookie();
+
   const login = useGoogleLogin({
     onSuccess: async (response) => {
+      console.log(response.access_token);
       try {
-        const res = await axios.get(
+        const userInfoResponse = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
           {
             headers: { Authorization: `Bearer ${response.access_token}` },
           }
         );
 
-        if (res.status === 200) {
+        if (userInfoResponse.status === 200) {
           const userData = {
-            email: res.data.email,
-            firstName: res.data.name,
-            img: res.data.picture,
-            isVerified: res.data.email_verified,
+            email: userInfoResponse.data.email,
+            firstName: userInfoResponse.data.name,
+            img: userInfoResponse.data.picture,
+            isVerified: userInfoResponse.data.email_verified,
           };
 
           // Post data to backend
-          const response = await axios.post(
-            "http://localhost:5000/api/auth/google-signup",
-            userData
-          );
+          const response = await axios.post("/api/google-signup", userData);
 
           if (response.status === 200) {
-            console.log(response);
-            const res = await axios.post(
-              "http://localhost:5000/api/auth/google-login",
-              userData
-            );
-            if (res.status === 200) {
+            // console.log(response);
+
+            const res = await axios.post("/api/google-login", userData);
+            if (res.status === 200 && res.data.token) {
               toast.success("OTP sent to your email", {
                 position: "top-right",
                 autoClose: 5000,
@@ -51,10 +50,25 @@ const LoginGoogle = () => {
                 theme: "light",
                 transition: Bounce,
               });
-              router.push("/profile");
-              console.log(res.data.token);
+              console.log("login user", res.data.token);
               setCookie(res.data.token);
+              // if (token) {
+              router.push("/profile");
+              // }
+              refetch();
+              // console.log(response.access_token);
             }
+            // toast.error("couldn't login", {
+            //   position: "top-right",
+            //   autoClose: 5000,
+            //   hideProgressBar: false,
+            //   closeOnClick: false,
+            //   pauseOnHover: true,
+            //   draggable: true,
+            //   progress: undefined,
+            //   theme: "light",
+            //   transition: Bounce,
+            // });
           }
         }
       } catch (err) {

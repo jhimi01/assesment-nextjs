@@ -11,7 +11,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
-  
+
   return (
     <nav
       className={`${

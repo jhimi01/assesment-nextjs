@@ -11,10 +11,9 @@ export async function POST(req) {
     // Find the user in the database
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return new Response(
-        JSON.stringify({ error: "User not found" }),
-        { status: 404 }
-      );
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     // Check if OTP is valid and not expired
@@ -23,10 +22,9 @@ export async function POST(req) {
       !user.otpExpiration ||
       user.otpExpiration < new Date()
     ) {
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired OTP" }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "Invalid or expired OTP" }), {
+        status: 400,
+      });
     }
 
     // Mark user as verified
