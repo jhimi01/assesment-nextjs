@@ -17,7 +17,7 @@ const SendEmail = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/sendemail-forgotpassword",
+        "/api/send-mail-forgot-password",
         data
       );
 
@@ -39,9 +39,9 @@ const SendEmail = () => {
       console.log(response)
     } catch (error) {
       setLoading(false);
-      const message = JSON.parse(error?.request?.responseText)?.error;
-      console.log(message);
-      toast.error(message, {
+      // const message = JSON.parse(error?.request?.responseText)?.error;
+      console.log(error);
+      toast.error(error, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

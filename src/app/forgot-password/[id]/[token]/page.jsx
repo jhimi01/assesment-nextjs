@@ -1,3 +1,4 @@
+'use client'
 import axios from "axios";
 import { Eye, EyeClosed, Loader } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -25,7 +26,7 @@ const ForgetPassword = () => {
       console.log("correct password");
       try {
         const response = await axios.post(
-          `http://localhost:5000/api/auth/reset-forgotpassword/${id}/${token}`,
+          `/api/reset-forgotpassword/${id}/${token}`,
           { newPassword: data.newpassword }
         );
 
