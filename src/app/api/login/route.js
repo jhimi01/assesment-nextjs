@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
+// login
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -70,6 +71,7 @@ export async function POST(req) {
   }
 }
 
+// get loggedInUser data
 export async function GET(req) {
   try {
     const token = req.headers.get("Authorization")?.split(" ")[1];
@@ -115,6 +117,40 @@ export async function GET(req) {
     console.error("Error during token verification:", error);
     return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
       status: 401,
+    });
+  }
+}
+
+// log out
+export async function DELETE(req) {
+  try {
+    const token = req.headers.get("Authorization").split(" ")[1];
+
+    console.log("token: " + token);
+
+    if (!token) {
+      return new Response(JSON.stringify({ error: "Token is required" }), {
+        status: 401,
+      });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    const { userId } = decoded;
+
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "invalid token payload" }));
+    }
+
+    await prisma.loggedInUser.delete({
+      where: { userId },
+    });
+
+    return new Response(JSON.stringify({ error: "logged out successfully" }), {
+      status: 200,
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Failed logout" }), {
+      status: 500,
     });
   }
 }
