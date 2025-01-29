@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import { generateOTP } from "@/utils/otp"; // Correct path
-import { sendOTPEmail } from "@/utils/email"; // Correct path
+import { generateOTP } from "@/utils/otp";
+import { sendOTPEmail } from "@/utils/email";
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
@@ -118,6 +119,82 @@ export async function GET(req) {
     return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
       status: 401,
     });
+  }
+}
+
+// update loggedInUser data
+export async function PATCH(req) {
+  try {
+    // Ensure Authorization header exists
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: "Authorization header missing" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (!decoded.userId) {
+      return NextResponse.json(
+        { error: "Invalid token payload" },
+        { status: 401 }
+      );
+    }
+
+    const { userId } = decoded;
+    // Parse the request body
+    const body = await req.json();
+
+    const {
+      firstName,
+      lastName,
+      email,
+      mobileNumber,
+      dateOfBirth,
+      gender,
+      nid,
+      country,
+      title,
+      address,
+    } = body;
+
+    const updateUserData = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName,
+        lastName,
+        email,
+        mobileNumber,
+        dateOfBirth,
+        gender,
+        nid,
+        country,
+        title,
+        address,
+      },
+    });
+
+    // console.log("updateUserData", updateUserData);
+
+    return NextResponse.json(
+      {
+        message: "User profile updated successfully",
+        user: updateUserData, // Return updated user data
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error during token update user:", error);
+    return NextResponse.json(
+      { error: error.message || "Something went wrong" },
+      { status: 500 }
+    );
   }
 }
 

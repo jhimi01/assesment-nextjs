@@ -1,6 +1,6 @@
+"use client";
+import { useCookie } from "@/hooks/useCookie";
 import { useState } from "react";
-import { useCookie } from "../hooks/useCookie";
-import PropTypes from "prop-types";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
@@ -35,17 +35,14 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     setError(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/auth/edit-profile`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Add the token here
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`/api/login`, {
+        method: "PATCH",
+        headers: {
+          // "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the token here
+        },
+        body: JSON.stringify(formData),
+      });
       if (response.ok) {
         toast.success("updated", {
           position: "top-right",
@@ -77,7 +74,12 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+    <div
+      role="dialog"
+      aria-labelledby="edit-profile-title"
+      aria-modal="true"
+      className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    >
       <div className="bg-white p-6 w-[90%] md:w-[70%]">
         <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -295,13 +297,5 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   theme="light"
   transition={Bounce}
 />;
-
-EditProfileModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  userData: PropTypes.object.isRequired, // Ensure this matches the actual type
-  onSave: PropTypes.func.isRequired,
-};
-
 
 export default EditProfileModal;
