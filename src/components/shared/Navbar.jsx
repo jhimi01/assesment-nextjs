@@ -11,7 +11,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
-
+  
   return (
     <nav
       className={`${
@@ -68,10 +68,10 @@ const Navbar = () => {
             </div>
             {/* login/server */}
             {user &&
-            user.loggedInUser &&
-            user.loggedInUser.id &&
-            user.loggedInUser.token &&
-            user.loggedInUser.token === token ? (
+            user?.userData &&
+            user?.userData?.loggedInUser?.id &&
+            user?.userData?.loggedInUser?.token &&
+            user?.userData?.loggedInUser?.token === token ? (
               <div className="flex gap-5 items-center">
                 <Link href="/profile">
                   <img

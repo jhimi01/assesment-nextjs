@@ -21,6 +21,9 @@ const ProfilePage = () => {
   const handleEditClick = () => setIsModalOpen(true);
   const handleResetPasswordClick = () => setIsResetPasswordModalOpen(true);
 
+
+  console.log("user data", user)
+
   const handleImageChange = (newImageUrl) => {
     refetch();
     console.log("Image URL received from child:", newImageUrl);
