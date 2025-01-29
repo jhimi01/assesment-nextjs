@@ -6,6 +6,7 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { email, firstName, img, isVerified } = body;
+    console.log("Received data:", req.body);
 
     let user = await prisma.user.findUnique({ where: { email } });
 
@@ -21,9 +22,19 @@ export async function POST(req) {
       });
     }
 
+    if (!user) {
+      return new Response(JSON.stringify({ message: "User creation failed" }), {
+        status: 500,
+      });
+    }
+    
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "7d",
     });
+
+    // const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
+    //   expiresIn: "7d",
+    // });
 
     await prisma.loggedInUser.upsert({
       where: { userId: user.id },
@@ -47,7 +58,7 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.log("Error ocured while creating user:", err);
+    console.log("Error ocured while login with google:", err);
     return new Response(
       JSON.stringify({ message: "Error ocured while login with google" }),
       { status: 500 }

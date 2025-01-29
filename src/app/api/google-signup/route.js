@@ -5,17 +5,31 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { email, firstName, img, isVerified } = body;
+    console.log("Received data:", body);
+
 
     if (!email || !firstName) {
-      return res.status(400).json({ error: "Missing email or first name" });
+        return new Response(
+        JSON.stringify({
+          error: "Missing email or first name"
+        }),
+        {
+          status: 400,
+        }
+      );
     }
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      return res.status(200).json({
-        message: "User already exists",
-        user: existingUser,
-      });
+      return new Response(
+        JSON.stringify({
+          error: "User already exists",
+          user: existingUser,
+        }),
+        {
+          status: 200,
+        }
+      );
     }
     const newUser = await prisma.user.create({
       data: {
@@ -27,7 +41,10 @@ export async function POST(req) {
     });
 
     return new Response(
-      JSON.stringify({ message: "user created successfully", user: newUser }),
+      JSON.stringify({
+        message: "user created successfully",
+        user: newUser,
+      }),
       {
         status: 200,
       }

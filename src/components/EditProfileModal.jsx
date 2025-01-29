@@ -1,5 +1,6 @@
 "use client";
 import { useCookie } from "@/hooks/useCookie";
+import axios from "axios";
 import { useState } from "react";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
@@ -35,13 +36,11 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     setError(null);
 
     try {
-      const response = await fetch('/api/login', {
-        method: "PATCH",
+      const response = await axios.patch("/api/login", formData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Add the token here
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
       });
        // ✅ Check if response body exists before parsing JSON
    
@@ -61,10 +60,10 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
         });
       }
       // const result = await response.json();
-      const result = response.headers.get("content-length") === "0" ? {} : await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || "Something went wrong");
-      }
+      // const result = response.headers.get("content-length") === "0" ? {} : await response.json();
+      // if (!response.ok) {
+      //   throw new Error(result.message || "Something went wrong");
+      // }
 
       setLoading(false);
       onSave(formData);

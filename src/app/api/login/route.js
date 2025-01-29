@@ -15,7 +15,7 @@ const validateToken = (req) => {
     if (!authHeader) throw new Error("Authorization header missing");
     
     const token = authHeader.split(" ")[1];
-    console.log("authHeaderrrrrrr", token)
+    // console.log("authHeaderrrrrrr", token)
     if (!token) throw new Error("Invalid token format");
 
     if (!process.env.JWT_SECRET_KEY) {
@@ -35,6 +35,8 @@ const validateToken = (req) => {
 // Utility function to handle responses
 const createResponse = (data, status = 200) =>
   NextResponse.json(data, { status });
+
+// console.log(data)
 
 // Utility function for error handling
 const handleError = (error, customMessage = "An error occurred") => {
@@ -109,7 +111,7 @@ export async function GET(req) {
       include: { loggedInUser: true },
     });
 
-    console.log(user);
+    // console.log(user);
 
     if (!user) return createResponse({ error: "User not found" }, 404);
 
@@ -165,6 +167,7 @@ export async function PATCH(req) {
       user: updateUserData,
     });
   } catch (error) {
+    console.log(error)
     return handleError(error, "Error during user profile update");
   }
 }
