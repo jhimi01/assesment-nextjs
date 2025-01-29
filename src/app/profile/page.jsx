@@ -42,7 +42,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.post(
-        "https://qatarbackend.solar-ict.com/api/auth/change-password",
+        "/api/change-password",
         {
           email: user?.userData?.email,
           oldPassword,

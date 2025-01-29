@@ -1,6 +1,5 @@
 'use client'
 import { useState } from "react";
-import PropTypes from "prop-types";
 import { Eye, EyeClosed } from "lucide-react";
 
 const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
@@ -115,12 +114,6 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
       </div>
     </div>
   );
-};
-
-ResetPasswordModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default ResetPasswordModal;
