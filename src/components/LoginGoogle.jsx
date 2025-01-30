@@ -33,7 +33,7 @@ const LoginGoogle = () => {
             console.log(response);
             const res = await axios.post("/api/google-login", userData);
             if (res.status === 200) {
-              toast.success("OTP sent to your email", {
+              toast.success("loggedIn successfully", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

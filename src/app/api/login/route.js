@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
-
 // Utility function to validate token
 const validateToken = (req) => {
   try {
