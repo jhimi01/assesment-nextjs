@@ -1,8 +1,10 @@
 import Banner from "@/components/Banner";
-import Image from "next/image";
+import { Bounce, ToastContainer } from "react-toastify";
 
 export default function Home() {
-  return <main>
-    <Banner />
-  </main>;
+  return (
+    <main>
+      <Banner />
+    </main>
+  );
 }

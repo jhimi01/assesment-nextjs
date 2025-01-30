@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Edit } from "lucide-react";
 import { format } from "date-fns";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import axios from "axios";
 import { useCookie } from "@/hooks/useCookie";
 import ResetPasswordModal from "@/components/ResetPasswordModal";
@@ -86,10 +86,10 @@ const ProfilePage = () => {
   return (
     <div className="bg-gray-200">
       <div className="wrapper">
-        <div className="mt-10 p-4">
-          <div className="flex gap-4">
+        <div className="mt-10 md:p-4">
+          <div className="md:flex gap-4">
             {/* Left Section */}
-            <div className="w-[30%] space-y-3 p-4 bg-white mx-auto text-center">
+            <div className="md:w-[30%] space-y-3 p-4 bg-white mx-auto text-center">
               <div className="group mx-auto relative w-40">
                 <img
                   src={
@@ -120,7 +120,7 @@ const ProfilePage = () => {
             </div>
 
             {/* Right Section */}
-            <div className="w-[80%] p-4 bg-white mx-auto">
+            <div className="md:w-[80%] p-4 bg-white mx-auto">
               <table className="min-w-full table-auto">
                 <tbody>
                   {[
@@ -177,7 +177,6 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
 
       {/* Modals */}
       <EditProfileModal

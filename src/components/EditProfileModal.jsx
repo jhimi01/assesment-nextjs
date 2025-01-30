@@ -2,7 +2,7 @@
 import { useCookie } from "@/hooks/useCookie";
 import axios from "axios";
 import { useState } from "react";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 
 const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   const [formData, setFormData] = useState({
@@ -42,9 +42,6 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-       // ✅ Check if response body exists before parsing JSON
-   
-
 
       if (response.ok) {
         toast.success("updated", {
@@ -59,11 +56,6 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           transition: Bounce,
         });
       }
-      // const result = await response.json();
-      // const result = response.headers.get("content-length") === "0" ? {} : await response.json();
-      // if (!response.ok) {
-      //   throw new Error(result.message || "Something went wrong");
-      // }
 
       setLoading(false);
       onSave(formData);
@@ -88,9 +80,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
         <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="flex gap-5">
+          <div className="md:flex gap-5">
             {/* First Name */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label
                 htmlFor="firstName"
                 className="block text-sm font-semibold"
@@ -108,7 +100,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
 
             {/* Last Name */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="lastName" className="block text-sm font-semibold">
                 Last Name
               </label>
@@ -123,9 +115,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
           </div>
 
-          <div className="flex gap-5">
+          <div className="md:flex gap-5">
             {/* Email */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="email" className="block text-sm font-semibold">
                 Email
               </label>
@@ -140,7 +132,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
 
             {/* Mobile Number */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label
                 htmlFor="mobileNumber"
                 className="block text-sm font-semibold"
@@ -158,9 +150,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
           </div>
 
-          <div className="flex gap-5">
+          <div className="md:flex gap-5">
             {/* Date of Birth */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label
                 htmlFor="dateOfBirth"
                 className="block text-sm font-semibold"
@@ -178,7 +170,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
 
             {/* Gender */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="gender" className="block text-sm font-semibold">
                 Gender
               </label>
@@ -196,9 +188,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
           </div>
 
-          <div className="flex gap-5">
+          <div className="md:flex gap-5">
             {/* NID */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="nid" className="block text-sm font-semibold">
                 NID
               </label>
@@ -213,7 +205,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
 
             {/* Country */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="country" className="block text-sm font-semibold">
                 Country
               </label>
@@ -228,9 +220,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
           </div>
 
-          <div className="flex gap-5">
+          <div className="md:flex gap-5">
             {/* Title */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="title" className="block text-sm font-semibold">
                 Title
               </label>
@@ -252,7 +244,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
             </div>
 
             {/* Address */}
-            <div className="mb-3 w-1/2">
+            <div className="mb-3 md:w-1/2">
               <label htmlFor="address" className="block text-sm font-semibold">
                 Address
               </label>
@@ -288,18 +280,6 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     </div>
   );
 };
-<ToastContainer
-  position="top-right"
-  autoClose={3000}
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick={false}
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="light"
-  transition={Bounce}
-/>;
+;
 
 export default EditProfileModal;

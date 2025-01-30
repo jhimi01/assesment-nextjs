@@ -1,7 +1,5 @@
+import prisma from "@/lib/db";
 import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 
 export async function PATCH(req) {
   try {

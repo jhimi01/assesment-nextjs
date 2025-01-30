@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+
+import prisma from "@/lib/db";
 import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     const body = await req.json();

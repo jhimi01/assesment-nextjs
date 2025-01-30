@@ -1,37 +1,125 @@
-import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
+// import prisma from "@/lib/db";
+// import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+// export async function POST(req) {
+//   try {
+//     const body = await req.json();
+//     const { email, otp } = body;
+
+//     // Find the user in the database
+//     const user = await prisma.user.findUnique({ where: { email } });
+//     if (!user) {
+//       return new Response(JSON.stringify({ error: "User not found" }), {
+//         status: 404,
+//       });
+//     }
+
+//     // Check if OTP is valid and not expired
+//     if (
+//       user.otp !== otp ||
+//       !user.otpExpiration ||
+//       user.otpExpiration < new Date()
+//     ) {
+//       return new Response(JSON.stringify({ error: "Invalid or expired OTP" }), {
+//         status: 400,
+//       });
+//     }
+
+//     // Mark user as verified
+//     await prisma.user.update({
+//       where: { email },
+//       data: { isVerified: true },
+//     });
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { userId: user.id, email: user.email },
+//       process.env.JWT_SECRET_KEY,
+//       { expiresIn: "7d" }
+//     );
+
+//     // Update or create the logged-in user record
+//     await prisma.loggedInUser.upsert({
+//       where: { userId: user.id },
+//       update: {
+//         verifiedOtp: true,
+//         token,
+//       },
+//       create: {
+//         userId: user.id,
+//         verifiedOtp: true,
+//         token,
+//       },
+//     });
+
+//     // Return success response
+//     return new Response(
+//       JSON.stringify({
+//         message: "User verified successfully",
+//         userData: { ...user },
+//         token,
+//       }),
+//       { status: 200 }
+//     );
+//   } catch (err) {
+//     console.error("Error during OTP verification:", err);
+//     return new Response(
+//       JSON.stringify({ error: "Error during OTP verification" }),
+//       { status: 500 }
+//     );
+//   }
+// }
+
+import { NextResponse } from "next/server";
+import prisma from "@/lib/db";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   try {
     const body = await req.json();
     const { email, otp } = body;
 
-    // Find the user in the database
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
-      });
+    if (!email || !otp) {
+      return NextResponse.json(
+        { error: "Email and OTP are required" },
+        { status: 400 }
+      );
     }
 
-    // Check if OTP is valid and not expired
+    // Find the user
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Validate OTP and expiration
     if (
-      user.otp !== otp ||
+      !user.otp ||
       !user.otpExpiration ||
+      user.otp !== otp ||
       user.otpExpiration < new Date()
     ) {
-      return new Response(JSON.stringify({ error: "Invalid or expired OTP" }), {
-        status: 400,
-      });
+      return NextResponse.json(
+        { error: "Invalid or expired OTP" },
+        { status: 400 }
+      );
     }
 
     // Mark user as verified
     await prisma.user.update({
       where: { email },
-      data: { isVerified: true },
+      data: { isVerified: true, otp: null, otpExpiration: null }, // Clear OTP after verification
     });
+
+    // Validate JWT secret
+    if (!process.env.JWT_SECRET_KEY) {
+      console.error("Missing JWT_SECRET_KEY in environment variables");
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      );
+    }
 
     // Generate JWT token
     const token = jwt.sign(
@@ -40,33 +128,25 @@ export async function POST(req) {
       { expiresIn: "7d" }
     );
 
-    // Update or create the logged-in user record
+    // Update or create logged-in user record
     await prisma.loggedInUser.upsert({
       where: { userId: user.id },
-      update: {
-        verifiedOtp: true,
-        token,
-      },
-      create: {
-        userId: user.id,
-        verifiedOtp: true,
-        token,
-      },
+      update: { verifiedOtp: true, token },
+      create: { userId: user.id, verifiedOtp: true, token },
     });
 
-    // Return success response
-    return new Response(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         message: "User verified successfully",
-        userData: { ...user },
+        userData: { id: user.id, email: user.email, isVerified: true },
         token,
-      }),
+      },
       { status: 200 }
     );
-  } catch (err) {
-    console.error("Error during OTP verification:", err);
-    return new Response(
-      JSON.stringify({ error: "Error during OTP verification" }),
+  } catch (error) {
+    console.error("Error during OTP verification:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

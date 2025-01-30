@@ -6,7 +6,7 @@ import { Eye, EyeClosed, Loader } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useCookie } from "../../hooks/useCookie";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import LoginGoogle from "../../components/LoginGoogle";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -23,7 +23,7 @@ const Login = () => {
   const [recaptchaToken, setRecaptchaToken] = useState("");
   const { setCookie } = useCookie({ key: "Token", days: 7 });
   const [showOTP, setShowOTP] = useState(false);
-  const [otp, setOtp] = useState();
+  const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
 
   const router = useRouter();
@@ -241,19 +241,6 @@ const Login = () => {
             </Link>
           </div>
         </div>
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
       </div>
     </div>
   );

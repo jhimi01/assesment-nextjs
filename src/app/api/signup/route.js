@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sendOTPEmail } from "@/utils/email";
 import { generateOTP } from "@/utils/otp";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/db";
 
 export async function POST(req, res) {
   try {

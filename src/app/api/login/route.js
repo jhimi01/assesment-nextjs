@@ -1,12 +1,11 @@
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
 import { generateOTP } from "@/utils/otp";
 import { sendOTPEmail } from "@/utils/email";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/db";
 
-const prisma = new PrismaClient();
 
 // Utility function to validate token
 const validateToken = (req) => {
@@ -15,7 +14,6 @@ const validateToken = (req) => {
     if (!authHeader) throw new Error("Authorization header missing");
     
     const token = authHeader.split(" ")[1];
-    // console.log("authHeaderrrrrrr", token)
     if (!token) throw new Error("Invalid token format");
 
     if (!process.env.JWT_SECRET_KEY) {
@@ -36,7 +34,6 @@ const validateToken = (req) => {
 const createResponse = (data, status = 200) =>
   NextResponse.json(data, { status });
 
-// console.log(data)
 
 // Utility function for error handling
 const handleError = (error, customMessage = "An error occurred") => {
@@ -46,15 +43,6 @@ const handleError = (error, customMessage = "An error occurred") => {
     { status: 500 }
   );
 };
-// Utility function for error handling
-// const handleError = (error, customMessage = "An error occurred") => {
-//   console.error(customMessage, error instanceof Error ? error : new Error(error));
-//   return NextResponse.json(
-//     { error: error.message || customMessage },
-//     { status: 500 }
-//   );
-// };
-
 
 // Login
 export async function POST(req) {
